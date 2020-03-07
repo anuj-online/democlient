@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,7 @@ import reactor.core.publisher.Flux;
 import java.time.Duration;
 
 @RestController
+@Slf4j
 public class ClientController {
 
 
@@ -21,7 +23,7 @@ public class ClientController {
         Flux<DataObject> dataObjectFlux = webClient.get().uri("/all/1").retrieve().bodyToFlux(DataObject.class);
 
         dataObjectFlux.delayElements(Duration.ofSeconds(1L)).doOnNext(
-                System.out::println
+                x -> log.info("Received : {}", x)
 
         ).subscribe();
 
